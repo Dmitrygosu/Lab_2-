@@ -1,17 +1,12 @@
-Lab 2. Задание
-
-Написать программу, которая читая последовательность чисел из файла, выводит на экран самую длинную возрастающую последовательность, ее длину и позицию 
-(в числах и символах) с которой она началась.
-
-
-import time,os,string,psutil
+import time,os,string,psutil,re
 
 start_time = time.time()
 symbol_len = 1  # Размер буфера чтения
-with open('111.txt','r+') as file: 
-    s = str(file.read())
-if  os.stat("111.txt").st_size == 0 or not s.isdigit():
-    print("Файл пуст или содержит не только числа  !!!")
+with open('111.txt','r+') as file:
+    a = str(file.read())
+    s = re.sub('[^\d]', '', a)
+if  os.stat("111.txt").st_size == 0 :
+    print("Файл пуст   !!!")
 else:
     print("Введена последовоательность :",s)
     res = ''
