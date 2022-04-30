@@ -1,0 +1,26 @@
+import time,os,string,psutil
+print("Файл принимает исключиттельно числа!!!")
+start_time = time.time()
+symbol_len = 1  # Размер буфера чтения
+with open('111.txt','r+') as file:
+    s = str(file.read())
+
+print("Введена последовоательность :",s)
+res = ''
+res_list = []
+i = 0
+
+while i < len(s):
+    if res == '' or (int(res[-1]) < int(s[i])):
+        res += s[i]
+    else:
+        res_list.append(res)
+        res = s[i]
+    i += 1
+
+res_list.append(res)
+_max = max(res_list, key=len)
+print(f'Самая длинная восх. посл. - {_max}\nсимволов - {len(_max)}\nначальный индекс - {s.find(_max)}')
+process = psutil.Process(os.getpid())
+print("Программа занимает ", process.memory_info().rss /1048576,"мбайт")  # in bytes
+print("--- %s Секунд выполнялась программа  ---" % (time.time() - start_time))
