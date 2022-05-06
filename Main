@@ -1,29 +1,33 @@
-import time,os,string,psutil,re
-
+import fileinput,time,os,psutil,re
 start_time = time.time()
-symbol_len = 1  # Размер буфера чтения
-with open('111.txt','r+') as file:
-    a = str(file.read())
-    s = re.sub('[^\d]', '', a)
-if  os.stat("111.txt").st_size == 0 :
-    print("Файл пуст   !!!")
-else:
-    print("Введена последовоательность :",s)
-    res = ''
-    res_list = []
-    i = 0
+lst = []
+s = ''
+l = ''
+n = ''
 
-    while i < len(s):
-        if res == '' or (int(res[-1]) < int(s[i])):
-            res += s[i]
-        else:
-            res_list.append(res)
-            res = s[i]
-        i += 1
+with fileinput.FileInput('111.txt') as file: # Считываем файл
+    for line in file:
+            for i in re.findall(r'\d+', line):
+                lst.append(i)
 
-    res_list.append(res)
-    _max = max(res_list, key=len)
-    print(f'Самая длинная восх. посл. - {_max}\nсимволов - {len(_max)}\nначальный индекс - {s.find(_max)}')
-    process = psutil.Process(os.getpid())
-    print("Программа занимает ", process.memory_info().rss /1048576,"мбайт")  # in bytes
-    print("--- %s Секунд выполнялась программа  ---" % (time.time() - start_time))
+if not lst: # Если нет результата(проверка на пустой файл)
+    print('\nФайл text.txt пустой.')
+else:    # Находим самую длинную последовательность
+    for number, i in enumerate(lst):
+        buff = 0
+        for j in i:
+            if int(j) > buff:
+                buff = int(j)
+                s = i
+                l = len(i)
+                n = number + 1
+            else:
+                break
+
+print(f'Список всех последовательностей - {lst}\n'
+      f'Самая длинная восх. посл. - {s}\n'
+      f'Длинна последовательности - {l}\n'
+      f'Номер последовательности - {n}')
+process = psutil.Process(os.getpid())
+print("Программа занимает ", process.memory_info().rss /1048576,"мбайт")  # in mbytes
+print("--- %s Секунд выполнялась программа  ---" % (time.time() - start_time))
