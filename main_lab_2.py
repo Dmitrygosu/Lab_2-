@@ -1,9 +1,7 @@
 import fileinput,time,os,psutil,re
 start_time = time.time()
 lst = []
-s = ''
-l = ''
-n = ''
+s,l,n=' '*3
 
 with fileinput.FileInput('111.txt') as file: # Считываем файл
     for line in file:
