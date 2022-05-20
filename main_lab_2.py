@@ -1,31 +1,39 @@
-import fileinput,time,os,psutil,re
+import fileinput, time,os,re,psutil
 start_time = time.time()
 lst = []
-s,l,n=' '*3
-
-with fileinput.FileInput('111.txt') as file: # Считываем файл
+# СЧитаем файл
+with fileinput.FileInput('111.txt') as file:
     for line in file:
             for i in re.findall(r'\d+', line):
                 lst.append(i)
-
-if not lst: # Если нет результата(проверка на пустой файл)
-    print('\nФайл text.txt пустой.')
-else:    # Находим самую длинную последовательность
+    # Список возрастающих последовательностей
+    list1 = []
+    # Находим самую длинную последовательность
     for number, i in enumerate(lst):
+        temp_s=''
+        fl = True
         buff = 0
-        for j in i:
-            if int(j) > buff:
-                buff = int(j)
-                s = i
-                l = len(i)
-                n = number + 1
-            else:
-                break
+        # Проверяем только если больше одного символа
+        if len(i) > 1:
+            for j in i:
+                if int(j) > buff:
+                    # Накапливаем последовательность
+                    temp_s += j
+                    buff = int(j)
+                else:
+                    # Не возрастающая последовательность
+                    fl= False
+                    break
+            # Запомнили последовательность и её номер
+            if fl:
+                list1.append((temp_s, number + 1))
+# Находим самую длинную последовательность
+longest=max(list1, key=lambda i: len(i[0]))
 
-print(f'Список всех последовательностей - {lst}\n'
-      f'Самая длинная восх. посл. - {s}\n'
-      f'Длинна последовательности - {l}\n'
-      f'Номер последовательности - {n}')
+print(f'Полученные из файла последовательнности- {lst}\n'
+      f'Самая длинная восх. посл. - {longest[0]}\n'
+      f'Длина последовательности - {len(longest[0])}\n'
+      f'Номер последовательности - {longest[1]}')
 process = psutil.Process(os.getpid())
-print("Программа занимает ", process.memory_info().rss /1048576,"мбайт")  # in mbytes
+print("Программа занимает ", process.memory_info().rss /1048576,"мбайт")  # in bytes
 print("--- %s Секунд выполнялась программа  ---" % (time.time() - start_time))
