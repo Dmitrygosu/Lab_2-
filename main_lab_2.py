@@ -12,7 +12,7 @@ with fileinput.FileInput('111.txt') as file:
     for number, i in enumerate(lst):
         temp_s=''
         fl = True
-        buff = 0
+        buff = -1
         # Проверяем только если больше одного символа
         if len(i) > 1:
             for j in i:
